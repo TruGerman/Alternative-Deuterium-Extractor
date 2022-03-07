@@ -64,7 +64,7 @@ namespace AltDeuteriumExtractor
             }
 
             if (FUSION_TANKS.NullOrEmpty()) return 0;
-            float toAdd = amount / FUSION_TANKS.Count;
+            float toAdd = amount / (float) FUSION_TANKS.Count;
             for (int i = 0; i < FUSION_TANKS.Count; ++i)
             {
                 float actuallyAdded = min(toAdd, FUSION_TANKS[i].deuteriumSpace);
@@ -104,7 +104,7 @@ namespace AltDeuteriumExtractor
             }
 
             if (WATER_TANKS.NullOrEmpty()) return 0;
-            float toAdd = amount / WATER_TANKS.Count;
+            float toAdd = amount / (float) WATER_TANKS.Count;
             for (int i = 0; i < WATER_TANKS.Count; ++i)
             {
                 float actuallyAdded = min(toAdd, WATER_TANKS[i].WaterStorage);

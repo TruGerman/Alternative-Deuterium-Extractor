@@ -10,7 +10,7 @@ namespace AltDeuteriumExtractor
         public AltDeuteriumExtractorMod(ModContentPack content) : base(content)
         {
             settings = GetSettings<AltDeuteriumExtractorModSettings>();
-            CompDeuteriumProcessor.inverseEfficiency = 1 / settings.efficiency;
+            CompDeuteriumProcessor.inverseEfficiency = 1F / settings.efficiency;
         }
 
         public override string SettingsCategory()
@@ -39,7 +39,7 @@ namespace AltDeuteriumExtractor
         public override void WriteSettings()
         {
             base.WriteSettings();
-            CompDeuteriumProcessor.inverseEfficiency = 1/settings.efficiency;
+            CompDeuteriumProcessor.inverseEfficiency = 1F / settings.efficiency;
         }
     }
 
@@ -61,7 +61,7 @@ namespace AltDeuteriumExtractor
     }
 
     [StaticConstructorOnStartup]
-    public class Textures
+    public static class Textures
     {
         public static readonly Texture2D GIZMO_POWER_LEVEL = ContentFinder<Texture2D>.Get("UI/Commands/ADE_GizmoSetPowerLevel");
     }
