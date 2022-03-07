@@ -10,6 +10,7 @@ namespace AltDeuteriumExtractor
         public AltDeuteriumExtractorMod(ModContentPack content) : base(content)
         {
             settings = GetSettings<AltDeuteriumExtractorModSettings>();
+            CompDeuteriumProcessor.inverseEfficiency = 1 / settings.efficiency;
         }
 
         public override string SettingsCategory()
@@ -22,12 +23,23 @@ namespace AltDeuteriumExtractor
             base.DoSettingsWindowContents(inRect);
             Listing_Standard ls = new();
             ls.Begin(inRect);
-            ls.TextFieldNumericLabeled("ADE_EfficiencySetting".Translate(), ref settings.efficiency, ref settings.bufferEfficiency, 0.0001F, float.MaxValue);
-            ls.TextFieldNumericLabeled("ADE_WaterPerTickSetting".Translate(), ref settings.waterPerTick, ref settings.bufferWaterPerTick, 0.001F, float.MaxValue);
-            ls.TextFieldNumericLabeled("ADE_PowerDrawSetting".Translate(), ref settings.powerDraw, ref settings.bufferPowerDraw, float.MinValue, float.MaxValue);
-            ls.TextFieldNumericLabeled("ADE_MaxDeuteriumSetting".Translate(), ref settings.maxDeuterium, ref settings.bufferMaxDeuterium, 1, int.MaxValue);
-            ls.TextFieldNumericLabeled("ADE_MaxWaterSetting".Translate(), ref settings.maxWater, ref settings.bufferMaxWater, 1, int.MaxValue);
+            ls.Label("ADE_EfficiencySetting".Translate(), -1F, "ADE_EfficiencySettingTooltip".Translate());
+            ls.TextFieldNumeric(ref settings.efficiency, ref settings.bufferEfficiency, 0.0001F, float.MaxValue);
+            ls.Label("ADE_WaterPerTickSetting".Translate(), -1F, "ADE_WaterPerTickSettingTooltip".Translate());
+            ls.TextFieldNumeric( ref settings.waterPerTick, ref settings.bufferWaterPerTick, 0.001F, float.MaxValue);
+            ls.Label("ADE_PowerDrawSetting".Translate(), -1f, "ADE_PowerDrawSettingTooltip".Translate());
+            ls.TextFieldNumeric(ref settings.powerDraw, ref settings.bufferPowerDraw, float.MinValue, float.MaxValue);
+            ls.Label("ADE_MaxDeuteriumSetting".Translate(), -1F, "ADE_MaxDeuteriumSettingTooltip".Translate());
+            ls.TextFieldNumeric(ref settings.maxDeuterium, ref settings.bufferMaxDeuterium, 1, int.MaxValue);
+            ls.Label("ADE_MaxWaterSetting".Translate(), -1F, "ADE_MaxWaterSettingTooltip".Translate());
+            ls.TextFieldNumeric( ref settings.maxWater, ref settings.bufferMaxWater, 1, int.MaxValue);
             ls.End();
+        }
+
+        public override void WriteSettings()
+        {
+            base.WriteSettings();
+            CompDeuteriumProcessor.inverseEfficiency = 1/settings.efficiency;
         }
     }
 
@@ -46,5 +58,11 @@ namespace AltDeuteriumExtractor
             Scribe_Values.Look(ref maxDeuterium, "maxDeuterium", 50, true);
             Scribe_Values.Look(ref maxWater, "maxWater", 500, true);
         }
+    }
+
+    [StaticConstructorOnStartup]
+    public class Textures
+    {
+        public static readonly Texture2D GIZMO_POWER_LEVEL = ContentFinder<Texture2D>.Get("UI/Commands/ADE_GizmoSetPowerLevel");
     }
 }
