@@ -15,39 +15,40 @@ namespace AltDeuteriumExtractor
         //These temporarily store suitable comps during the tick cycle, almost cutting the tick time in half. This is always faster for lists with up to 50 elements
         protected static readonly List<CompWaterStorage> WATER_TANKS = new();
         protected static readonly List<CompFusionStorage> FUSION_TANKS = new();
+        //Quick and dirty math hack to save performance, gets set from the main mod class on startup and recalculated whenever the efficiency is changed
+        public static float inverseEfficiency;
         public float storedWater, storedDeuterium, output = 1F;
         public CompPipe waterPipe;
         public CompPowerTrader power;
         public CompFusionPipe fusionPipe;
         public CompBreakdownable breakdown;
 
-        public CompPropertiesDeuteriumProcessor Props => (CompPropertiesDeuteriumProcessor)Props;
+        public CompPropertiesDeuteriumProcessor Props => (CompPropertiesDeuteriumProcessor)props;
 
         public override void CompTick()
         {
             base.CompTick();
             if (!power.PowerOn || breakdown.BrokenDown) return;
             process();
-            if (pushDeuterium() + pullWater() <= 0.001F && !canProcess())
+            if (pushDeuterium() + pullWater() < 0.001F && !canProcess())
             {
                 power.PowerOutput = 0F;
                 return;
             }
-            power.PowerOutput = settings.powerDraw * output * -1;
+            power.PowerOutput = settings.powerDraw * output * -1F;
         }
 
-        //Includes a built in margin to account for rounding errors
+        //Includes a margin to account for rounding errors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual bool canProcess()
         {
             return storedWater > 0.005F && storedDeuterium < settings.maxDeuterium;
         }
 
-        //Runs the push cycle
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //Pushes Deuterium to the Deuterium tanks and returns the amount that was pushed
         public virtual float pushDeuterium()
         {
-            float toPush = pushDeuteriumToNet(fusionPipe.network, min(storedDeuterium, settings.waterPerTick * settings.efficiency * 1.5F));
+            float toPush = pushDeuteriumToNet(fusionPipe.network, min(storedDeuterium, settings.waterPerTick * 1.5F));
             storedDeuterium -= toPush;
             return toPush;
         }
@@ -75,7 +76,6 @@ namespace AltDeuteriumExtractor
         }
 
         //Pulls water from the net and adds it to the internal tank, returns the amount that was added
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual float pullWater()
         {
             float toExtract = pullWaterFromNet(waterPipe.pipeNet, clamp(settings.maxWater - storedWater, 0F, settings.waterPerTick * 1.5F));
@@ -84,12 +84,12 @@ namespace AltDeuteriumExtractor
         }
 
         //Runs the conversion
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual void process()
         {
-            float deuteriumToAdd = clamp(settings.maxDeuterium - storedDeuterium, 0F, min(storedWater, settings.waterPerTick)) * output;
-            storedWater -= deuteriumToAdd;
-            storedDeuterium += deuteriumToAdd * settings.efficiency;
+            //Process as much Deuterium as possible, but limit it by how much water is available/allowed to process per tick
+            float deuteriumToAdd = clamp(settings.maxDeuterium - storedDeuterium, 0F, min(storedWater, settings.waterPerTick)*settings.efficiency) * output;
+            storedWater -= deuteriumToAdd * inverseEfficiency;
+            storedDeuterium += deuteriumToAdd;
 
         }
 
@@ -116,7 +116,6 @@ namespace AltDeuteriumExtractor
         }
 
         //Sets the operating level via a crude method I bootlegged from vanilla
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void setPowerLevel()
         {
             //The output is being converted to a float here because it turns out that multiplying/dividing with ints is a lot slower than doing the same with floats
@@ -135,7 +134,7 @@ namespace AltDeuteriumExtractor
                 action = this.setPowerLevel,
                 defaultLabel = "ADE_PowerLevelGizmoLabel".Translate(),
                 defaultDesc = "ADE_PowerLevelGizmoDescription".Translate(),
-                icon = CompRefuelable.SetTargetFuelLevelCommand
+                icon = Textures.GIZMO_POWER_LEVEL
             };
             yield return setPowerLevel;
         }
