@@ -23,7 +23,7 @@ namespace AltDeuteriumExtractor
         public CompFusionPipe fusionPipe;
         public CompBreakdownable breakdown;
 
-        public CompPropertiesDeuteriumProcessor Props => (CompPropertiesDeuteriumProcessor)props;
+        public CompProperties_DeuteriumProcessor Props => (CompProperties_DeuteriumProcessor)props;
 
         public override void CompTick()
         {
@@ -56,19 +56,20 @@ namespace AltDeuteriumExtractor
         //Pushes Deuterium to the network and returns the amount that was actually pushed
         public static float pushDeuteriumToNet(FusionNetwork net, float amount)
         {
-            if (net == null) return 0;
-            float pushed = 0;
+            if (net == null) return 0F;
+            float pushed = 0F;
             for (int i = 0; i < net.storage.Count; ++i)
             {
-                if (net.storage[i].deuteriumSpace > 0 && net.storage[i].loadingMode == FusionLoadingMode.AllowLoading) FUSION_TANKS.Add(net.storage[i]);
+                var tank = net.storage[i];
+                if (tank.deuteriumSpace > 0F && tank.loadingMode == FusionLoadingMode.AllowLoading) FUSION_TANKS.Add(tank);
             }
-
-            if (FUSION_TANKS.NullOrEmpty()) return 0;
-            float toAdd = amount / (float) FUSION_TANKS.Count;
+            if (FUSION_TANKS.NullOrEmpty()) return 0F;
+            float toAdd = amount / (float)FUSION_TANKS.Count;
             for (int i = 0; i < FUSION_TANKS.Count; ++i)
             {
-                float actuallyAdded = min(toAdd, FUSION_TANKS[i].deuteriumSpace);
-                FUSION_TANKS[i].deuteriumStored += actuallyAdded;
+                var tank = FUSION_TANKS[i];
+                float actuallyAdded = min(toAdd, tank.deuteriumSpace);
+                tank.deuteriumStored += actuallyAdded;
                 pushed += actuallyAdded;
             }
             FUSION_TANKS.Clear();
@@ -87,28 +88,28 @@ namespace AltDeuteriumExtractor
         public virtual void process()
         {
             //Process as much Deuterium as possible, but limit it by how much water is available/allowed to process per tick
-            float deuteriumToAdd = clamp(settings.maxDeuterium - storedDeuterium, 0F, min(storedWater, settings.waterPerTick)*settings.efficiency) * output;
+            float deuteriumToAdd = clamp(settings.maxDeuterium - storedDeuterium, 0F, min(storedWater, settings.waterPerTick) * settings.efficiency) * output;
             storedWater -= deuteriumToAdd * inverseEfficiency;
             storedDeuterium += deuteriumToAdd;
-
         }
 
         //Pulls water from the net and returns the amount that was actually removed
         public static float pullWaterFromNet(PlumbingNet net, float amount)
         {
-            if (net == null) return 0;
-            float pushed = 0;
+            if (net == null) return 0F;
+            float pushed = 0F;
             for (int i = 0; i < net.WaterTowers.Count; ++i)
             {
-                if (net.WaterTowers[i].WaterStorage > 0) WATER_TANKS.Add(net.WaterTowers[i]);
+                var tank = net.WaterTowers[i];
+                if (tank.WaterStorage > 0F) WATER_TANKS.Add(tank);
             }
-
-            if (WATER_TANKS.NullOrEmpty()) return 0;
-            float toAdd = amount / (float) WATER_TANKS.Count;
+            if (WATER_TANKS.NullOrEmpty()) return 0F;
+            float toAdd = amount / (float)WATER_TANKS.Count;
             for (int i = 0; i < WATER_TANKS.Count; ++i)
             {
-                float actuallyAdded = min(toAdd, WATER_TANKS[i].WaterStorage);
-                WATER_TANKS[i].WaterStorage -= actuallyAdded;
+                var tank = WATER_TANKS[i];
+                float actuallyAdded = min(toAdd, tank.WaterStorage);
+                tank.WaterStorage -= actuallyAdded;
                 pushed += actuallyAdded;
             }
             WATER_TANKS.Clear();
@@ -128,7 +129,6 @@ namespace AltDeuteriumExtractor
             {
                 yield return gizmo;
             }
-
             Command_Action setPowerLevel = new()
             {
                 action = this.setPowerLevel,
@@ -142,7 +142,7 @@ namespace AltDeuteriumExtractor
         public override string CompInspectStringExtra()
         {
             SB.AppendLine(base.CompInspectStringExtra());
-            SB.AppendLine("ADE_PowerLevel".Translate((output * 100)));
+            SB.AppendLine("ADE_PowerLevel".Translate((output * 100F)));
             SB.AppendLine("ADE_WaterCounter".Translate(decimal.Round((decimal)storedWater, 1), settings.maxWater));
             SB.AppendLine("ADE_DeuteriumCounter".Translate(decimal.Round((decimal)storedDeuterium, 2), settings.maxDeuterium));
             string s = SB.ToString().Trim();
@@ -180,5 +180,4 @@ namespace AltDeuteriumExtractor
             return value1 > value2 ? value2 : value1;
         }
     }
-
 }
