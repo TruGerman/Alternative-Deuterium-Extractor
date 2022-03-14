@@ -1,4 +1,5 @@
-﻿using DubsBadHygiene;
+﻿using System;
+using DubsBadHygiene;
 using EccentricPower;
 using RimWorld;
 using System.Collections.Generic;
@@ -30,19 +31,22 @@ namespace AltDeuteriumExtractor
             base.CompTick();
             if (!power.PowerOn || breakdown.BrokenDown) return;
             process();
-            if (pushDeuterium() + pullWater() < 0.001F && !canProcess())
+            if (pushDeuterium() + pullWater() < 0.01F && !canProcess())
             {
                 power.PowerOutput = 0F;
                 return;
             }
-            power.PowerOutput = settings.powerDraw * output * -1F;
+            if (power.PowerOutput == 0F)
+            {
+                power.PowerOutput = settings.powerDraw * output * -1F;
+            }
         }
 
         //Includes a margin to account for rounding errors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual bool canProcess()
         {
-            return storedWater > 0.005F && storedDeuterium < settings.maxDeuterium;
+            return storedWater > 0.005F && (settings.maxDeuterium - storedDeuterium) > 0.005F;
         }
 
         //Pushes Deuterium to the Deuterium tanks and returns the amount that was pushed
@@ -120,7 +124,11 @@ namespace AltDeuteriumExtractor
         public void setPowerLevel()
         {
             //The output is being converted to a float here because it turns out that multiplying/dividing with ints is a lot slower than doing the same with floats
-            Find.WindowStack.Add(new Dialog_Slider((x) => "ADE_EfficiencySlider".Translate(x), 1, 100, x => output = (float)x * 0.01F, (int)decimal.Round((decimal)(output * 100F))));
+            Find.WindowStack.Add(new Dialog_Slider((x) => "ADE_EfficiencySlider".Translate(x), 1, 100, x =>
+            {
+                output = (float)x * 0.01F;
+                power.PowerOutput = settings.powerDraw * output * -1F;
+            }, (int)Math.Round(output * 100F)));
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -142,9 +150,9 @@ namespace AltDeuteriumExtractor
         public override string CompInspectStringExtra()
         {
             SB.AppendLine(base.CompInspectStringExtra());
-            SB.AppendLine("ADE_PowerLevel".Translate((output * 100F)));
-            SB.AppendLine("ADE_WaterCounter".Translate(decimal.Round((decimal)storedWater, 1), settings.maxWater));
-            SB.AppendLine("ADE_DeuteriumCounter".Translate(decimal.Round((decimal)storedDeuterium, 2), settings.maxDeuterium));
+            SB.AppendLine("ADE_PowerLevel".Translate(Math.Round(output * 100F)));
+            SB.AppendLine("ADE_WaterCounter".Translate(Math.Round(storedWater, 1), settings.maxWater));
+            SB.AppendLine("ADE_DeuteriumCounter".Translate(Math.Round(storedDeuterium, 2), settings.maxDeuterium));
             string s = SB.ToString().Trim();
             SB.Clear();
             return s;
