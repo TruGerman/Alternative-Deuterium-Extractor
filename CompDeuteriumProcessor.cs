@@ -5,6 +5,7 @@ using RimWorld;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using UnityEngine;
 using Verse;
 using static AltDeuteriumExtractor.AltDeuteriumExtractorMod;
 
@@ -17,12 +18,12 @@ namespace AltDeuteriumExtractor
         protected static readonly List<CompWaterStorage> WATER_TANKS = new();
         protected static readonly List<CompFusionStorage> FUSION_TANKS = new();
         //Quick and dirty math hack to save performance, gets set from the main mod class on startup and recalculated whenever the efficiency is changed
-        public static float inverseEfficiency;
-        public float storedWater, storedDeuterium, output = 1F;
-        public CompPipe waterPipe;
-        public CompPowerTrader power;
-        public CompFusionPipe fusionPipe;
-        public CompBreakdownable breakdown;
+        public static float inverseEfficiency, waterPerDay, deuteriumPerDay;
+        float storedWater, storedDeuterium, output = 1F;
+        CompPipe waterPipe;
+        CompPowerTrader power;
+        CompFusionPipe fusionPipe;
+        CompBreakdownable breakdown;
 
         public CompProperties_DeuteriumProcessor Props => (CompProperties_DeuteriumProcessor)props;
 
@@ -36,21 +37,21 @@ namespace AltDeuteriumExtractor
                 power.PowerOutput = 0F;
                 return;
             }
+
             if (power.PowerOutput == 0F)
             {
                 power.PowerOutput = settings.powerDraw * output * -1F;
             }
         }
 
-        //Includes a margin to account for rounding errors
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public virtual bool canProcess()
+        protected virtual bool canProcess()
         {
             return storedWater > 0.005F && (settings.maxDeuterium - storedDeuterium) > 0.005F;
         }
 
         //Pushes Deuterium to the Deuterium tanks and returns the amount that was pushed
-        public virtual float pushDeuterium()
+        protected virtual float pushDeuterium()
         {
             float toPush = pushDeuteriumToNet(fusionPipe.network, min(storedDeuterium, settings.waterPerTick * 1.5F));
             storedDeuterium -= toPush;
@@ -58,7 +59,7 @@ namespace AltDeuteriumExtractor
         }
 
         //Pushes Deuterium to the network and returns the amount that was actually pushed
-        public static float pushDeuteriumToNet(FusionNetwork net, float amount)
+        protected static float pushDeuteriumToNet(FusionNetwork net, float amount)
         {
             if (net == null) return 0F;
             float pushed = 0F;
@@ -67,7 +68,8 @@ namespace AltDeuteriumExtractor
                 var tank = net.storage[i];
                 if (tank.deuteriumSpace > 0F && tank.loadingMode == FusionLoadingMode.AllowLoading) FUSION_TANKS.Add(tank);
             }
-            if (FUSION_TANKS.NullOrEmpty()) return 0F;
+
+            if (FUSION_TANKS.Count == 0) return 0F;
             float toAdd = amount / (float)FUSION_TANKS.Count;
             for (int i = 0; i < FUSION_TANKS.Count; ++i)
             {
@@ -76,20 +78,20 @@ namespace AltDeuteriumExtractor
                 tank.deuteriumStored += actuallyAdded;
                 pushed += actuallyAdded;
             }
+
             FUSION_TANKS.Clear();
             return pushed;
         }
 
         //Pulls water from the net and adds it to the internal tank, returns the amount that was added
-        public virtual float pullWater()
+        protected virtual float pullWater()
         {
             float toExtract = pullWaterFromNet(waterPipe.pipeNet, clamp(settings.maxWater - storedWater, 0F, settings.waterPerTick * 1.5F));
             storedWater += toExtract;
             return toExtract;
         }
 
-        //Runs the conversion
-        public virtual void process()
+        protected virtual void process()
         {
             //Process as much Deuterium as possible, but limit it by how much water is available/allowed to process per tick
             float deuteriumToAdd = clamp(settings.maxDeuterium - storedDeuterium, 0F, min(storedWater, settings.waterPerTick) * settings.efficiency) * output;
@@ -98,7 +100,7 @@ namespace AltDeuteriumExtractor
         }
 
         //Pulls water from the net and returns the amount that was actually removed
-        public static float pullWaterFromNet(PlumbingNet net, float amount)
+        private static float pullWaterFromNet(PlumbingNet net, float amount)
         {
             if (net == null) return 0F;
             float pushed = 0F;
@@ -107,7 +109,8 @@ namespace AltDeuteriumExtractor
                 var tank = net.WaterTowers[i];
                 if (tank.WaterStorage > 0F) WATER_TANKS.Add(tank);
             }
-            if (WATER_TANKS.NullOrEmpty()) return 0F;
+
+            if (WATER_TANKS.Count == 0) return 0F;
             float toAdd = amount / (float)WATER_TANKS.Count;
             for (int i = 0; i < WATER_TANKS.Count; ++i)
             {
@@ -116,20 +119,30 @@ namespace AltDeuteriumExtractor
                 tank.WaterStorage -= actuallyAdded;
                 pushed += actuallyAdded;
             }
+
             WATER_TANKS.Clear();
             return pushed;
         }
 
         //Sets the operating level via a crude method I bootlegged from vanilla
-        public void setPowerLevel()
+        private void setPowerLevel()
         {
-            //The output is being converted to a float here because it turns out that multiplying/dividing with ints is a lot slower than doing the same with floats
-            Find.WindowStack.Add(new Dialog_Slider((x) => "ADE_EfficiencySlider".Translate(x), 1, 100, x =>
-            {
-                output = (float)x * 0.01F;
-                power.PowerOutput = settings.powerDraw * output * -1F;
-            }, (int)Math.Round(output * 100F)));
+            //It turns out that multiplying/dividing with ints is a lot slower than doing the same with floats
+            //TODO find out if the text field can be expanded
+            Find.WindowStack.Add(new Dialog_Slider(x => "ADE_EfficiencySlider".Translate(x, Mathf.RoundToInt(waterPerDay * (float)x * 0.01F), Mathf.Round(deuteriumPerDay * (float)x * 0.1F) * 0.1D), 1, 100, x =>
+                {
+                    output = (float)x * 0.01F;
+                    power.PowerOutput = settings.powerDraw * output * -1F;
+                    recalculateDailyProcessingRates();
+                }, Mathf.RoundToInt(output * 100F)));
         }
+
+        public static void recalculateDailyProcessingRates()
+        {
+            waterPerDay = settings.waterPerTick * 60000F;
+            deuteriumPerDay = waterPerDay * settings.efficiency;
+        }
+
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
@@ -137,6 +150,7 @@ namespace AltDeuteriumExtractor
             {
                 yield return gizmo;
             }
+
             Command_Action setPowerLevel = new()
             {
                 action = this.setPowerLevel,
@@ -150,9 +164,11 @@ namespace AltDeuteriumExtractor
         public override string CompInspectStringExtra()
         {
             SB.AppendLine(base.CompInspectStringExtra());
-            SB.AppendLine("ADE_PowerLevel".Translate(Math.Round(output * 100F)));
-            SB.AppendLine("ADE_WaterCounter".Translate(Math.Round(storedWater, 1), settings.maxWater));
-            SB.AppendLine("ADE_DeuteriumCounter".Translate(Math.Round(storedDeuterium, 2), settings.maxDeuterium));
+            SB.AppendLine("ADE_PowerLevel".Translate(Mathf.RoundToInt(output * 100F)));
+            SB.AppendLine("ADE_WaterCounter".Translate(Mathf.Round(storedWater * 10F) * 0.1D, settings.maxWater));
+            SB.AppendLine("ADE_DeuteriumCounter".Translate(Mathf.Round(storedDeuterium * 100F) * 0.01D, settings.maxDeuterium));
+            SB.AppendLine("ADE_WaterPerDay".Translate(Mathf.RoundToInt(waterPerDay * output)));
+            SB.AppendLine("ADE_DeuteriumPerDay".Translate(Mathf.Round(deuteriumPerDay * output * 10F) * 0.1D));
             string s = SB.ToString().Trim();
             SB.Clear();
             return s;
@@ -177,13 +193,13 @@ namespace AltDeuteriumExtractor
 
         //Custom math methods that hopefully get inlined to provide a tiny performance boost. Functionally identical to their Mathf counterparts
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float clamp(float value, float min, float max)
+        protected static float clamp(float value, float min, float max)
         {
             return value < min ? min : value > max ? max : value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float min(float value1, float value2)
+        protected static float min(float value1, float value2)
         {
             return value1 > value2 ? value2 : value1;
         }
