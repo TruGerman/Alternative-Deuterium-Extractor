@@ -1,5 +1,4 @@
-﻿using System;
-using DubsBadHygiene;
+﻿using DubsBadHygiene;
 using EccentricPower;
 using RimWorld;
 using System.Collections.Generic;
@@ -13,13 +12,13 @@ namespace AltDeuteriumExtractor
 {
     class CompDeuteriumProcessor : ThingComp
     {
-        public static readonly StringBuilder SB = new();
+        private static readonly StringBuilder SB = new();
         //These temporarily store suitable comps during the tick cycle, almost cutting the tick time in half. This is always faster for lists with up to 50 elements
-        protected static readonly List<CompWaterStorage> WATER_TANKS = new();
-        protected static readonly List<CompFusionStorage> FUSION_TANKS = new();
+        private static readonly List<CompWaterStorage> WATER_TANKS = new();
+        private static readonly List<CompFusionStorage> FUSION_TANKS = new();
         //Quick and dirty math hack to save performance, gets set from the main mod class on startup and recalculated whenever the efficiency is changed
         public static float inverseEfficiency, waterPerDay, deuteriumPerDay;
-        float storedWater, storedDeuterium, output = 1F;
+        private float storedWater, storedDeuterium, output = 1F;
         CompPipe waterPipe;
         CompPowerTrader power;
         CompFusionPipe fusionPipe;
@@ -30,28 +29,21 @@ namespace AltDeuteriumExtractor
         public override void CompTick()
         {
             base.CompTick();
+            power.PowerOutput = settings.powerDraw * output * -1F;
             if (!power.PowerOn || breakdown.BrokenDown) return;
             process();
-            if (pushDeuterium() + pullWater() < 0.01F && !canProcess())
-            {
-                power.PowerOutput = 0F;
-                return;
-            }
-
-            if (power.PowerOutput == 0F)
-            {
-                power.PowerOutput = settings.powerDraw * output * -1F;
-            }
+            if (pushDeuterium() + pullWater() > 0.01F || canProcess()) return;
+            power.PowerOutput = 0F;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected virtual bool canProcess()
+        private bool canProcess()
         {
             return storedWater > 0.005F && (settings.maxDeuterium - storedDeuterium) > 0.005F;
         }
 
         //Pushes Deuterium to the Deuterium tanks and returns the amount that was pushed
-        protected virtual float pushDeuterium()
+        private float pushDeuterium()
         {
             float toPush = pushDeuteriumToNet(fusionPipe.network, min(storedDeuterium, settings.waterPerTick * 1.5F));
             storedDeuterium -= toPush;
@@ -59,7 +51,7 @@ namespace AltDeuteriumExtractor
         }
 
         //Pushes Deuterium to the network and returns the amount that was actually pushed
-        protected static float pushDeuteriumToNet(FusionNetwork net, float amount)
+        private static float pushDeuteriumToNet(FusionNetwork net, float amount)
         {
             if (net == null) return 0F;
             float pushed = 0F;
@@ -84,14 +76,14 @@ namespace AltDeuteriumExtractor
         }
 
         //Pulls water from the net and adds it to the internal tank, returns the amount that was added
-        protected virtual float pullWater()
+        private float pullWater()
         {
             float toExtract = pullWaterFromNet(waterPipe.pipeNet, clamp(settings.maxWater - storedWater, 0F, settings.waterPerTick * 1.5F));
             storedWater += toExtract;
             return toExtract;
         }
 
-        protected virtual void process()
+        private void process()
         {
             //Process as much Deuterium as possible, but limit it by how much water is available/allowed to process per tick
             float deuteriumToAdd = clamp(settings.maxDeuterium - storedDeuterium, 0F, min(storedWater, settings.waterPerTick) * settings.efficiency) * output;
@@ -130,11 +122,11 @@ namespace AltDeuteriumExtractor
             //It turns out that multiplying/dividing with ints is a lot slower than doing the same with floats
             //TODO find out if the text field can be expanded
             Find.WindowStack.Add(new Dialog_Slider(x => "ADE_EfficiencySlider".Translate(x, Mathf.RoundToInt(waterPerDay * (float)x * 0.01F), Mathf.Round(deuteriumPerDay * (float)x * 0.1F) * 0.1D), 1, 100, x =>
-                {
-                    output = (float)x * 0.01F;
-                    power.PowerOutput = settings.powerDraw * output * -1F;
-                    recalculateDailyProcessingRates();
-                }, Mathf.RoundToInt(output * 100F)));
+            {
+                output = (float)x * 0.01F;
+                power.PowerOutput = settings.powerDraw * output * -1F;
+                recalculateDailyProcessingRates();
+            }, Mathf.RoundToInt(output * 100F)));
         }
 
         public static void recalculateDailyProcessingRates()
@@ -181,6 +173,7 @@ namespace AltDeuteriumExtractor
             fusionPipe = parent.GetComp<CompFusionPipe>();
             power = parent.GetComp<CompPowerTrader>();
             breakdown = parent.GetComp<CompBreakdownable>();
+            Log.Message($"Power output: {settings.powerDraw}");
         }
 
         public override void PostExposeData()
@@ -193,13 +186,13 @@ namespace AltDeuteriumExtractor
 
         //Custom math methods that hopefully get inlined to provide a tiny performance boost. Functionally identical to their Mathf counterparts
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static float clamp(float value, float min, float max)
+        private static float clamp(float value, float min, float max)
         {
             return value < min ? min : value > max ? max : value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static float min(float value1, float value2)
+        private static float min(float value1, float value2)
         {
             return value1 > value2 ? value2 : value1;
         }
