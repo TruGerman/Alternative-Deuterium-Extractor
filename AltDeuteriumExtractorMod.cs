@@ -15,7 +15,6 @@ namespace AltDeuteriumExtractor
             recalculateReciprocal();
             refreshDeuteriumPerDay();
             recalculateDailyProcessingRates();
-
         }
 
         public override string SettingsCategory()
@@ -50,7 +49,7 @@ namespace AltDeuteriumExtractor
             ls.Label("ADE_MaxDeuteriumSetting".Translate(settings.maxDeuteriumBasic), -1F, "ADE_MaxDeuteriumSettingTooltip".Translate());
             settings.maxDeuteriumBasic = Mathf.RoundToInt(ls.Slider(settings.maxDeuteriumBasic, 1F, 250F));
             ls.Label("ADE_MaxWaterSetting".Translate(settings.maxWaterBasic), -1F, "ADE_MaxWaterSettingTooltip".Translate());
-            settings.maxWaterBasic = Mathf.RoundToInt(ls.Slider(settings.maxWaterBasic * 0.1F, 1F, 100F) * 10);
+            settings.maxWaterBasic = Mathf.RoundToInt(ls.Slider(settings.maxWaterBasic * 0.1F, 1F, 100F)) * 10;
             ls.Label("ADE_WaterPerDaySetting".Translate(Mathf.RoundToInt(settings.waterPerTickBasic * 60000F)), -1F, "ADE_WaterPerDaySettingTooltip".Translate());
             settings.waterPerTickBasic = ls.Slider(Mathf.RoundToInt(settings.waterPerTickBasic * 600F) * 100F, 100F, 15000F) / 60000F;
             ls.Label("ADE_DeuteriumPerDaySetting".Translate(Mathf.RoundToInt(settings.efficiencyBasic * 60000F * settings.waterPerTickBasic)), -1F, "ADE_DeuteriumPerDaySettingTooltip".Translate());
