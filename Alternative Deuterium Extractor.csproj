@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\..\Piped Deuterium Extractor\1.3\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -33,7 +33,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -56,8 +57,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp_publicized">
+      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BadHygiene">
@@ -74,7 +75,6 @@
     <Reference Include="System.Core">
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
@@ -89,6 +89,7 @@
     <Compile Include="AltDeuteriumExtractorModSettings.cs" />
     <Compile Include="CompDeuteriumProcessor.cs" />
     <Compile Include="CompProperties_DeuteriumProcessor.cs" />
+    <Compile Include="Dialog_Slider_Based.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Textures.cs" />
   </ItemGroup>

@@ -4,9 +4,9 @@ namespace AltDeuteriumExtractor
 {
     public class AltDeuteriumExtractorModSettings : ModSettings
     {
-        public float efficiency, efficiencyBasic, efficiencyAdvanced, waterPerTick, waterPerTickBasic, waterPerTickAdvanced, powerDraw, powerDrawBasic, powerDrawAdvanced, deuteriumPerDayAdvanced;
+        public float efficiency, efficiencyBasic, efficiencyAdvanced, waterPerTick, waterPerTickBasic, waterPerTickAdvanced, powerDraw, powerDrawBasic, powerDrawAdvanced, tolerance;
         public int maxDeuterium, maxDeuteriumBasic, maxDeuteriumAdvanced, maxWater, maxWaterBasic, maxWaterAdvanced, deuteriumPerDay;
-        public string bufferEfficiencyAdvanced, bufferWaterPerTickAdvanced, bufferPowerDrawAdvanced, bufferMaxDeuteriumAdvanced, bufferMaxWaterAdvanced, bufferDeuteriumPerDayAdvanced;
+        public string bufferEfficiencyAdvanced, bufferWaterPerTickAdvanced, bufferPowerDrawAdvanced, bufferMaxDeuteriumAdvanced, bufferMaxWaterAdvanced, bufferTolerance;
         public bool advancedMode, advancedOverride;
 
         public override void ExposeData()
@@ -23,6 +23,7 @@ namespace AltDeuteriumExtractor
             Scribe_Values.Look(ref maxDeuteriumAdvanced, "maxDeuteriumAdvanced", 50, true);
             Scribe_Values.Look(ref maxWaterAdvanced, "maxWaterAdvanced", 500, true);
             Scribe_Values.Look(ref advancedOverride, "advancedOverride", false, true);
+            Scribe_Values.Look(ref tolerance, "tolerance", 0.005F, true);
         }
 
     }
