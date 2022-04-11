@@ -73,7 +73,10 @@ namespace AltDeuteriumExtractor
             ls.Label("ADE_ToleranceAdvancedSetting".Translate(settings.tolerance), -1F, "ADE_ToleranceAdvancedSettingTooltip".Translate());
             ls.TextFieldNumeric(ref settings.tolerance, ref settings.bufferTolerance);
             ls.Gap();
+            var oldColor = GUI.color;
+            GUI.color = Color.green;
             ls.Label("ADE_DeuteriumPerDaySetting".Translate(Math.Round(settings.waterPerTickAdvanced * 60000F * settings.efficiencyAdvanced, 2)), -1F, "ADE_DeuteriumPerDayAdvancedSettingTooltip".Translate());
+            GUI.color = oldColor;
             if (settings.efficiencyAdvanced == 0 && settings.advancedOverride)
             {
                 var cachedColor = GUI.color;
