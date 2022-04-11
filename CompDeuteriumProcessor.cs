@@ -32,14 +32,14 @@ namespace AltDeuteriumExtractor
             power.PowerOutput = settings.powerDraw * output * -1F;
             if (!power.PowerOn || breakdown.BrokenDown) return;
             process();
-            if (pushDeuterium() + pullWater() > 0.01F || canProcess()) return;
+            if (pushDeuterium() + pullWater() > settings.tolerance || canProcess()) return;
             power.PowerOutput = 0F;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool canProcess()
         {
-            return storedWater > 0.005F && (settings.maxDeuterium - storedDeuterium) > 0.005F;
+            return storedWater > settings.tolerance && (settings.maxDeuterium - storedDeuterium) > settings.tolerance;
         }
 
         //Pushes Deuterium to the Deuterium tanks and returns the amount that was pushed
@@ -120,8 +120,7 @@ namespace AltDeuteriumExtractor
         private void setPowerLevel()
         {
             //It turns out that multiplying/dividing with ints is a lot slower than doing the same with floats
-            //TODO find out if the text field can be expanded
-            Find.WindowStack.Add(new Dialog_Slider(x => "ADE_EfficiencySlider".Translate(x, Mathf.RoundToInt(waterPerDay * (float)x * 0.01F), Mathf.Round(deuteriumPerDay * (float)x * 0.1F) * 0.1D), 1, 100, x =>
+            Find.WindowStack.Add(new Dialog_Slider_Based(x => "ADE_EfficiencySlider".Translate(x, Mathf.RoundToInt(waterPerDay * (float)x * 0.01F), Mathf.Round(deuteriumPerDay * (float)x * 0.1F) * 0.1D), 1, 100, x =>
             {
                 output = (float)x * 0.01F;
                 power.PowerOutput = settings.powerDraw * output * -1F;
@@ -134,7 +133,6 @@ namespace AltDeuteriumExtractor
             waterPerDay = settings.waterPerTick * 60000F;
             deuteriumPerDay = waterPerDay * settings.efficiency;
         }
-
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
@@ -157,10 +155,10 @@ namespace AltDeuteriumExtractor
         {
             SB.AppendLine(base.CompInspectStringExtra());
             SB.AppendLine("ADE_PowerLevel".Translate(Mathf.RoundToInt(output * 100F)));
-            SB.AppendLine("ADE_WaterCounter".Translate(Mathf.Round(storedWater * 10F) * 0.1D, settings.maxWater));
-            SB.AppendLine("ADE_DeuteriumCounter".Translate(Mathf.Round(storedDeuterium * 100F) * 0.01D, settings.maxDeuterium));
+            SB.AppendLine("ADE_WaterCounter".Translate(Mathf.Round(storedWater * 10F) * 0.1F, settings.maxWater));
+            SB.AppendLine("ADE_DeuteriumCounter".Translate(Mathf.Round(storedDeuterium * 100F) * 0.01F, settings.maxDeuterium));
             SB.AppendLine("ADE_WaterPerDay".Translate(Mathf.RoundToInt(waterPerDay * output)));
-            SB.AppendLine("ADE_DeuteriumPerDay".Translate(Mathf.Round(deuteriumPerDay * output * 10F) * 0.1D));
+            SB.AppendLine("ADE_DeuteriumPerDay".Translate(Mathf.Round(deuteriumPerDay * output * 100F) * 0.01F));
             string s = SB.ToString().Trim();
             SB.Clear();
             return s;
@@ -173,7 +171,6 @@ namespace AltDeuteriumExtractor
             fusionPipe = parent.GetComp<CompFusionPipe>();
             power = parent.GetComp<CompPowerTrader>();
             breakdown = parent.GetComp<CompBreakdownable>();
-            Log.Message($"Power output: {settings.powerDraw}");
         }
 
         public override void PostExposeData()
