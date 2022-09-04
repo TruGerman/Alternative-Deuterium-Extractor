@@ -5,9 +5,9 @@ namespace AltDeuteriumExtractor
     public class AltDeuteriumExtractorModSettings : ModSettings
     {
         public float efficiency, efficiencyBasic = 0.005F, efficiencyAdvanced = 0.005F, waterPerTick, waterPerTickBasic = 0.083333F, waterPerTickAdvanced = 0.083333F, powerDraw, powerDrawBasic = 1200F, powerDrawAdvanced = 1200F, tolerance = 0.005F;
-        public int maxDeuterium, maxDeuteriumBasic = 50, maxDeuteriumAdvanced, maxWater, maxWaterBasic = 500, maxWaterAdvanced, deuteriumPerDay;
+        public int maxDeuterium, maxDeuteriumBasic = 50, maxDeuteriumAdvanced = 50, maxWater, maxWaterBasic = 500, maxWaterAdvanced = 500, deuteriumPerDay;
         public string bufferEfficiencyAdvanced, bufferWaterPerTickAdvanced, bufferPowerDrawAdvanced, bufferMaxDeuteriumAdvanced, bufferMaxWaterAdvanced, bufferTolerance;
-        public bool advancedMode, advancedOverride;
+        public bool advancedMode, advancedOverride = false;
 
         public override void ExposeData()
         {
