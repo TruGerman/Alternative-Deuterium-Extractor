@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\Piped Deuterium Extractor\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\..\..\Piped Deuterium Extractor\1.4\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +28,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\Piped Deuterium Extractor\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\..\..\Piped Deuterium Extractor\1.4\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -57,15 +57,18 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp_publicized 1.3">
-      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized 1.3.dll</HintPath>
-    </Reference>
-    <Reference Include="BadHygiene">
-      <HintPath>..\..\..\..\..\..\..\workshop\content\294100\836308268\1.3\Assemblies\BadHygiene.dll</HintPath>
+    <Reference Include="Assembly-CSharp_publicized 1.4">
+      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized 1.4.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="EccentricPower">
-      <HintPath>..\..\..\..\..\..\..\workshop\content\294100\2742125879\1.3\Assemblies\EccentricPower.dll</HintPath>
+    <Reference Include="BadHygiene">
+      <HintPath>..\..\..\..\..\..\..\workshop\content\294100\836308268\1.4\Assemblies\BadHygiene.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="EccentricPower, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\workshop\content\294100\2742125879\1.4\Assemblies\EccentricPower.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System">
       <Private>False</Private>
@@ -79,6 +82,10 @@
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
