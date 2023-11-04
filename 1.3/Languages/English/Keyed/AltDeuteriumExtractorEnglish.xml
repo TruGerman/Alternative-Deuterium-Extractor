@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!--Mod Settings-->
+	<ADE_settingsCategoryLabel>Piped Deuterium Extractor Settings</ADE_settingsCategoryLabel>
+	<ADE_AdvancedSetting>Advanced Mode</ADE_AdvancedSetting>
+	<ADE_AdvancedSettingTooltip>Allows finer control over all the variables. Use at your own risk</ADE_AdvancedSettingTooltip>
+	<ADE_AdvancedOverrideSetting>Use Advanced Settings</ADE_AdvancedOverrideSetting>
+	<ADE_AdvancedOverrideSettingTooltip>Overrides basic settings when checked</ADE_AdvancedOverrideSettingTooltip>
+	<ADE_ResetButtonLabel>Reset</ADE_ResetButtonLabel>
+	<ADE_DivideByZeroError>Please raise the efficiency, computers don't like dividing by 0!</ADE_DivideByZeroError>
+
+	<!--Simple Mode-->
+	<ADE_PowerDrawSetting>Power Consumption: {0}W</ADE_PowerDrawSetting>
+	<ADE_PowerDrawSettingTooltip>Controls how much power the extractor draws at 100% power</ADE_PowerDrawSettingTooltip>
+	<ADE_MaxDeuteriumSetting>Deuterium Capacity: {0}</ADE_MaxDeuteriumSetting>
+	<ADE_MaxDeuteriumSettingTooltip>Controls how much deuterium the extractor is able to store internally</ADE_MaxDeuteriumSettingTooltip>
+	<ADE_MaxWaterSetting>Water Capacity: {0} L</ADE_MaxWaterSetting>
+	<ADE_MaxWaterSettingTooltip>Controls how much water the extractor is able to store internally</ADE_MaxWaterSettingTooltip>
+	<ADE_WaterPerDaySetting>Water per Day: {0} L</ADE_WaterPerDaySetting>
+	<ADE_WaterPerDaySettingTooltip>Controls how much water the extractor processes every day at 100% power</ADE_WaterPerDaySettingTooltip>
+	<ADE_DeuteriumPerDaySetting>Deuterium per Day: {0}</ADE_DeuteriumPerDaySetting>
+	<ADE_DeuteriumPerDaySettingTooltip>Controls how much deuterium the extractor produces every day at 100% power</ADE_DeuteriumPerDaySettingTooltip>
+
+	<!--Advanced Mode-->
+	<ADE_PowerDrawAdvancedSetting>Power Consumption (W)</ADE_PowerDrawAdvancedSetting>
+	<ADE_MaxDeuteriumAdvancedSetting>Deuterium Capacity</ADE_MaxDeuteriumAdvancedSetting>
+	<ADE_MaxWaterAdvancedSetting>Water Capacity (L)</ADE_MaxWaterAdvancedSetting>
+	<ADE_EfficiencySetting>Efficiency</ADE_EfficiencySetting>
+	<ADE_EfficiencySettingTooltip>Controls how much deuterium one liter of water yields</ADE_EfficiencySettingTooltip>
+	<ADE_WaterPerTickSetting>Water per Tick (~{0} L per day)</ADE_WaterPerTickSetting>
+	<ADE_WaterPerTickSettingTooltip>Controls how much water the extractor tries to process per tick at 100% power, regardless of the efficiency</ADE_WaterPerTickSettingTooltip>
+	<ADE_ToleranceAdvancedSetting>Extractor Tolerance</ADE_ToleranceAdvancedSetting>
+	<ADE_ToleranceAdvancedSettingTooltip>If the total amount of fluids processed per tick falls below, or if there's less water/space for deuterium in the internal tank than this value, the extractor will set its power draw to 0. Increase/decrease this if it mistakenly does so</ADE_ToleranceAdvancedSettingTooltip>
+	<ADE_DeuteriumPerDayAdvancedSettingTooltip>Indicates how much deuterium the extractor outputs at 100% power with the current settings</ADE_DeuteriumPerDayAdvancedSettingTooltip>
+	
+	<!--Building-->
+	<ADE_WaterCounter>Water: {0}/{1} L</ADE_WaterCounter>
+	<ADE_DeuteriumCounter>Deuterium: {0}/{1}</ADE_DeuteriumCounter>
+	<ADE_PowerLevel>Power level: {0}%</ADE_PowerLevel>
+	<ADE_WaterPerDay>Water per day: {0} L</ADE_WaterPerDay>
+	<ADE_DeuteriumPerDay>Deuterium per day: {0}</ADE_DeuteriumPerDay>
+	<ADE_EfficiencySlider>Power Level: {0}% | Daily processing rates:\nWater: {1} L\nDeuterium: {2}</ADE_EfficiencySlider>
+	<ADE_PowerLevelGizmoLabel>Power level</ADE_PowerLevelGizmoLabel>
+	<ADE_PowerLevelGizmoDescription>Set the power level. Lower values decrease power consumption, but also slow down production</ADE_PowerLevelGizmoDescription>
+
+</LanguageData>

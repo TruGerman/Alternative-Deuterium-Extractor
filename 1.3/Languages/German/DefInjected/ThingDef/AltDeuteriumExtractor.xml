@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+	<AltDeuteriumExtractor.label>Verrohrter Deuteriumextraktor</AltDeuteriumExtractor.label>
+	<AltDeuteriumExtractor.description>Eine Raffinerie, die aus Süßwasser Deuteriumoxid (Schweres Wasser) gewinnen kann. Das gewonnene Deuterium kann dann in dafür vorgesehene Tanks geleitet werden. Bei dieser Version muss das Süßwasser eingepumpt werden.</AltDeuteriumExtractor.description>
+</LanguageData>

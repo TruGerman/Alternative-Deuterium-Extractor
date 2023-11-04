@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!--Einstellungen-->
+	<ADE_settingsCategoryLabel>Verrohrter Deuteriumextraktor</ADE_settingsCategoryLabel>
+	<ADE_MaxDeuteriumSetting>Deuteriumkapazität </ADE_MaxDeuteriumSetting>
+	<ADE_MaxWaterSetting>Wasserkapazität </ADE_MaxWaterSetting>
+	<ADE_WaterPerDaySetting>Wasser pro Tag </ADE_WaterPerDaySetting>
+	<ADE_DeuteriumPerDaySetting>Deuterium pro Tag </ADE_DeuteriumPerDaySetting>
+
+	<!--Extraktor-->
+	<ADE_WaterCounter>Wasser: {0}/{1} L</ADE_WaterCounter>
+	<ADE_DeuteriumCounter>Deuterium: {0}/{1}</ADE_DeuteriumCounter>
+	<ADE_WaterPerDay>Wasser pro Tag: {0} L</ADE_WaterPerDay>
+	<ADE_DeuteriumPerDay>Deuterium pro Tag: {0}</ADE_DeuteriumPerDay>
+	
+</LanguageData>

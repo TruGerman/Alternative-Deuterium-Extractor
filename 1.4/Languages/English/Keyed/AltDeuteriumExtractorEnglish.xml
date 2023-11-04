@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!--Mod Settings-->
+	<ADE_settingsCategoryLabel>Piped Deuterium Extractor</ADE_settingsCategoryLabel>
+	<ADE_MaxDeuteriumSetting>Deuterium Capacity </ADE_MaxDeuteriumSetting>
+	<ADE_MaxWaterSetting>Water Capacity </ADE_MaxWaterSetting>
+	<ADE_WaterPerDaySetting>Water per Day </ADE_WaterPerDaySetting>
+	<ADE_DeuteriumPerDaySetting>Deuterium per Day </ADE_DeuteriumPerDaySetting>
+	
+	<!--Building-->
+	<ADE_WaterCounter>Water: {0}/{1} L</ADE_WaterCounter>
+	<ADE_DeuteriumCounter>Deuterium: {0}/{1}</ADE_DeuteriumCounter>
+	<ADE_WaterPerDay>Water per Day: {0} L</ADE_WaterPerDay>
+	<ADE_DeuteriumPerDay>Deuterium per Day: {0}</ADE_DeuteriumPerDay>
+
+</LanguageData>
