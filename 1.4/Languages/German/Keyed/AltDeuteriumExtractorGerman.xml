@@ -2,7 +2,7 @@
 <LanguageData>
 
 	<!--Einstellungen-->
-	<ADE_settingsCategoryLabel>Verrohrter Deuteriumextraktor</ADE_settingsCategoryLabel>
+	<ADE_SettingsCategoryLabel>Verrohrter Deuteriumextraktor</ADE_SettingsCategoryLabel>
 	<ADE_MaxDeuteriumSetting>Deuteriumkapazität </ADE_MaxDeuteriumSetting>
 	<ADE_MaxWaterSetting>Wasserkapazität </ADE_MaxWaterSetting>
 	<ADE_WaterPerDaySetting>Wasser pro Tag </ADE_WaterPerDaySetting>
