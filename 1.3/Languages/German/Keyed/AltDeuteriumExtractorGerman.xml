@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<!--Einstellungen-->
+	<ADE_settingsCategoryLabel>Verrohrter Deuteriumextraktor</ADE_settingsCategoryLabel>
+	<ADE_AdvancedSetting>Erweiterte Einstellungen</ADE_AdvancedSetting>
+	<ADE_AdvancedSettingTooltip>Ermöglicht das präzise Einstellen der Variablen. Verwendung auf eigene Gefahr</ADE_AdvancedSettingTooltip>
+	<ADE_AdvancedOverrideSetting>Erweiterte Einstellungen verwenden</ADE_AdvancedOverrideSetting>
+	<ADE_AdvancedOverrideSettingTooltip>Verwendet die erweiterten Einstellungen, falls angekreuzt</ADE_AdvancedOverrideSettingTooltip>
+	<ADE_ResetButtonLabel>Zurücksetzen</ADE_ResetButtonLabel>
+	<ADE_DivideByZeroError>Bitte erhöhe die Effizienz, Computer dividieren ungern durch 0!</ADE_DivideByZeroError>
+
+	<!--Einfache Einstellungen-->
+	<ADE_PowerDrawSetting>Stromverbrauch: {0}W</ADE_PowerDrawSetting>
+	<ADE_PowerDrawSettingTooltip>Legt fest, wie hoch der Stromverbrauch bei 100% Leistung ist</ADE_PowerDrawSettingTooltip>
+	<ADE_MaxDeuteriumSetting>Deuteriumkapazität: {0}</ADE_MaxDeuteriumSetting>
+	<ADE_MaxDeuteriumSettingTooltip>Legt fest, wie viel Deuterium der Extraktor intern speichern kann</ADE_MaxDeuteriumSettingTooltip>
+	<ADE_MaxWaterSetting>Wasserkapazität: {0} L</ADE_MaxWaterSetting>
+	<ADE_MaxWaterSettingTooltip>Legt fest, wie viel Wasser der Extraktor intern speichern kann</ADE_MaxWaterSettingTooltip>
+	<ADE_WaterPerDaySetting>Wasser pro Tag: {0} L</ADE_WaterPerDaySetting>
+	<ADE_WaterPerDaySettingTooltip>Legt fest, wie viel Wasser der Extraktor bei 100% Leistung pro Tag verarbeitet</ADE_WaterPerDaySettingTooltip>
+	<ADE_DeuteriumPerDaySetting>Deuterium pro Tag: {0}</ADE_DeuteriumPerDaySetting>
+	<ADE_DeuteriumPerDaySettingTooltip>Legt fest, wie viel Deuterium der Extraktor bei 100% Leistung pro Tag verarbeitet</ADE_DeuteriumPerDaySettingTooltip>
+
+	<!--Erweiterte Einstellungen-->
+	<ADE_PowerDrawAdvancedSetting>Stromverbrauch (W)</ADE_PowerDrawAdvancedSetting>
+	<ADE_MaxDeuteriumAdvancedSetting>Deuteriumkapazität</ADE_MaxDeuteriumAdvancedSetting>
+	<ADE_MaxWaterAdvancedSetting>Wasserkapazität (L)</ADE_MaxWaterAdvancedSetting>
+	<ADE_EfficiencySetting>Effizienz</ADE_EfficiencySetting>
+	<ADE_EfficiencySettingTooltip>Legt fest, wie viel Deuterium pro Liter Wasser erzeugt wird</ADE_EfficiencySettingTooltip>
+	<ADE_WaterPerTickSetting>Wasser pro Tick (~{0} L pro Tag)</ADE_WaterPerTickSetting>
+	<ADE_WaterPerTickSettingTooltip>Legt fest, wie viel Wasser der Extraktor pro Tick verarbeitet, unabhängig vom Stromverbrauch und der Effizienz</ADE_WaterPerTickSettingTooltip>
+	<ADE_ToleranceAdvancedSetting>Extraktortoleranz</ADE_ToleranceAdvancedSetting>
+	<ADE_ToleranceAdvancedSettingTooltip>Der Extraktor zieht keinen Strom, wenn er pro Tick weniger als diese Menge verarbeitet oder weniger Wasser/Platz für Deuterium im internen Tank besitzt. Ändere diesen Wert, falls der Extraktor das fälschlicherweise tut</ADE_ToleranceAdvancedSettingTooltip>
+	<ADE_DeuteriumPerDayAdvancedSettingTooltip>Zeigt an, wie viel Deuterium der Extraktor jeden Tag bei den momentanen Einstellungen produziert</ADE_DeuteriumPerDayAdvancedSettingTooltip>
+
+	<!--Extraktor-->
+	<ADE_WaterCounter>Wasser: {0}/{1} L</ADE_WaterCounter>
+	<ADE_DeuteriumCounter>Deuterium: {0}/{1}</ADE_DeuteriumCounter>
+	<ADE_PowerLevel>Leistung: {0}%</ADE_PowerLevel>
+	<ADE_WaterPerDay>Wasser pro Tag: {0} L</ADE_WaterPerDay>
+	<ADE_DeuteriumPerDay>Deuterium pro Tag: {0}</ADE_DeuteriumPerDay>
+	<ADE_EfficiencySlider>Leistung: {0}% | Tägliche Verarbeitungsrate:\nWasser: {1} L\nDeuterium: {2}</ADE_EfficiencySlider>
+	<ADE_PowerLevelGizmoLabel>Leistung</ADE_PowerLevelGizmoLabel>
+	<ADE_PowerLevelGizmoDescription>Legt die Leistung fest. Eine niedrigere Leistung verlangsamt die Verarbeitung, senkt aber auch den Stromverbrauch</ADE_PowerLevelGizmoDescription>
+
+	
+</LanguageData>
