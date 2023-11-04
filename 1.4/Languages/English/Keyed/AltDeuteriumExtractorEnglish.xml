@@ -2,7 +2,7 @@
 <LanguageData>
 
 	<!--Mod Settings-->
-	<ADE_settingsCategoryLabel>Piped Deuterium Extractor</ADE_settingsCategoryLabel>
+	<ADE_SettingsCategoryLabel>Piped Deuterium Extractor</ADE_SettingsCategoryLabel>
 	<ADE_MaxDeuteriumSetting>Deuterium Capacity </ADE_MaxDeuteriumSetting>
 	<ADE_MaxWaterSetting>Water Capacity </ADE_MaxWaterSetting>
 	<ADE_WaterPerDaySetting>Water per Day </ADE_WaterPerDaySetting>
