@@ -32,12 +32,12 @@ namespace AltDeuteriumExtractor
 
         private void PushDeuteriumOptimized()
         {
-            if (fusionPipe?.network is not FusionNetwork net) return;
+            if (fusionPipe?.Network is not FusionNetwork net) return;
             float left = Min(storedDeuterium, deuteriumPushedPerTick);
             float ogLeft = left;
-            for (int i = 0; i < net.storage.Count; ++i)
+            for (int i = 0; i < net.tanks.Count; ++i)
             {
-                var tank = net.storage[i];
+                var tank = net.tanks[i];
                 if (tank.deuteriumSpace <= 0F || tank.loadingMode != FusionLoadingMode.AllowLoading) continue;
                 float actuallyAdded = Min(left, tank.deuteriumSpace);
                 tank.deuteriumStored += actuallyAdded;
